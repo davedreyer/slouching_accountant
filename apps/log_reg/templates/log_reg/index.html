@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<title>User Reg</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	</link>
+</head>
+<body>
+	{% if messages %}
+    	{% for message in messages %}
+    		<p>{{ message }}</p>
+    	{% endfor %}
+	{% endif %}
+	<h1>Registration</h1>
+	<form action='{% url "authenticate:index" %}' method='POST'>
+		{% csrf_token %}
+		<input type="hidden" name="process" value="registration">
+		First Name: <input type="text" name="first"/>
+		Last Name: <input type="text" name="last"/>
+		Email: <input type="text" name="email"/>
+		Password: <input type="text" name="password"/>
+		Password Confirm: <input type="text" name="confirm_password"/>
+		<input type="submit" value="Submit" />
+	</form>
+	<form action='{% url "authenticate:index" %}' method='POST'>
+		{% csrf_token %}
+		<input type="hidden" name="process" value="login">
+		Email: <input type="text" name="email"/>
+		Password: <input type="text" name="password"/>
+		<input type="submit" value="Submit" />
+	</form>
+</body>
+</html>
