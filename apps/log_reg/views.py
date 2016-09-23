@@ -13,27 +13,28 @@ def index(request):
 			if check['created']:
 				request.session['user'] = {
 			        'id' : check['new_user'].id,
-			        'first_name' : check['new_user'].first_name,
-			        'last_name' : check['new_user'].last_name,
+			        'name' : check['new_user'].name,
+			        'alias' : check['new_user'].alias,
 			        'email' : check['new_user'].email,
 			    }
-				messages.success(request, "Success! Welcome {}!".format(request.session['user']['first_name']))
+				messages.success(request, "Success! Welcome {}!".format(request.session['user']['name']))
 				return redirect(reverse('cool_app:index'))	
+
 			else:
 				for x in check['errors']:
 					messages.error(request, x)
 				return redirect(reverse('authenticate:index'))
-		
+
 		elif request.POST['process'] == 'login':
 			check = User.objects.login_check(request.POST)
 			if check['login'] == True:
 				request.session['user'] = {
 			        'id' : check['user'].id,
-			        'first_name' : check['user'].first_name,
-			        'last_name' : check['user'].last_name,
+			        'name' : check['user'].name,
+			        'alias' : check['user'].alias,
 			        'email' : check['user'].email,
 			    }
-				messages.success(request, "Hi {}! You successfully logged in!".format(request.session['user']['first_name']))
+				messages.success(request, "Hi {}! You successfully logged in!".format(request.session['user']['name']))
 				return redirect(reverse('cool_app:index'))
 			else:
 				for x in check['errors']:

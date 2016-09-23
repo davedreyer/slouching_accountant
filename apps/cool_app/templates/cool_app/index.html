@@ -4,7 +4,38 @@
 	<title></title>
 </head>
 <body>
-Hello World!
-<a href='{% url "authenticate:logout" %}'>Logout</a>
+	<h2>Welcome, {{ request.session.user.name }}!</h2>
+	<h2>{{ poker_count }} people poked you!</h2>
+	<a href='{% url "authenticate:logout" %}'>Logout</a>
+
+	<h2>People you may want to poke:</h2> 
+
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Alias</th> 
+			<th>Email Address</th>
+			<th>Poke History</th>
+			<th>Action</th>
+		</tr>
+		{% for x in query %}
+		<tr>
+			<td>{{x.name}}</td>
+			<td>{{x.alias}}</td>
+			<td>{{x.email}}</td>
+			<td>{{x.count}}</td>
+			<td>
+				<form action='{% url "cool_app:poke" %}' method="POST">
+					{% csrf_token %}
+					<input type="hidden" value="{{x.id}}" name="pokee">
+					<input type="hidden" value="{{request.session.user.id}}" name="poker">
+					<input type="submit" value="Poke me!">
+				</form>
+			</td>
+		</tr>
+		{% endfor %} 
+
+		</table>
+
 </body>
 </html>

@@ -18,11 +18,14 @@
 	<form action='{% url "authenticate:index" %}' method='POST'>
 		{% csrf_token %}
 		<input type="hidden" name="process" value="registration">
-		First Name: <input type="text" name="first"/>
-		Last Name: <input type="text" name="last"/>
+		Name: <input type="text" name="name"/>
+		Alias: <input type="text" name="alias"/>
 		Email: <input type="text" name="email"/>
 		Password: <input type="text" name="password"/>
+		*Password should be at least 8 characters and contain one letter and one number!
 		Password Confirm: <input type="text" name="confirm_password"/>
+		Date of Birth: <input type="text" name="birthdate"/>
+		*Format must be MM/DD/YYYY!
 		<input type="submit" value="Submit" />
 	</form>
 	<form action='{% url "authenticate:index" %}' method='POST'>

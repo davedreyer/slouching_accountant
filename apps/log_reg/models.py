@@ -17,19 +17,21 @@ class UserManager(models.Manager):
 		pass_require = r'(?=.*[A-Z]+)(?=.*[0-9]+)'
 		# password requires at least one upper case letter and one number
 
+		birthdate_match = r'^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$'
+
 		error_messages = []
 
-		if len(postData['first']) < 2:
-			error_messages.append('First name must contain at least 2 characters!')
+		if len(postData['name']) < 2:
+			error_messages.append('Name must contain at least 2 characters!')
 			
-		if not re.search(name_match, postData['first']):
-			error_messages.append('First name must have only letters!')
+		if not re.search(name_match, postData['name']):
+			error_messages.append('Name must have only letters!')
 			
-		if len(postData['last']) < 2:
-			error_messages.append('Last name must contain at least 2 characters!')
+		if len(postData['alias']) < 2:
+			error_messages.append('Alias must contain at least 2 characters!')
 			
-		if not re.search(name_match, postData['last']):
-			error_messages.append('Last name must have only letters!')
+		if not re.search(name_match, postData['alias']):
+			error_messages.append('Alias must have only letters!')
 				
 		if not postData['email']:
 			error_messages.append('Email address is required!')
@@ -54,6 +56,12 @@ class UserManager(models.Manager):
 				
 		if postData['confirm_password'] != postData['password']:
 			error_messages.append("Confirm password and password must match!")
+
+		if not postData['birthdate']:
+			error_messages.append("Birthdate must be entered and format should be MM/DD/YYYY")
+
+		if not re.search(birthdate_match, postData['birthdate']):
+			error_messages.append("Birthdate must be entered in format of MM/DD/YYYY")
 					
 		response = {}				
 
@@ -63,7 +71,7 @@ class UserManager(models.Manager):
 
 		else:
 			pw_hash = bcrypt.hashpw(postData['password'].encode(), bcrypt.gensalt())
-			new_user = self.create(email=postData['email'],first_name=postData['first'],last_name=postData['last'],pw_hash=pw_hash)
+			new_user = self.create(email=postData['email'],name=postData['name'],alias=postData['alias'],birthdate=postData['birthdate'],pw_hash=pw_hash)
 			response['created'] = True
 			response['new_user'] = new_user
 
@@ -91,9 +99,10 @@ class UserManager(models.Manager):
 		return response	
 						
 class User(models.Model):
-	first_name=models.CharField(max_length=100)
-	last_name=models.CharField(max_length=100)
+	name=models.CharField(max_length=100)
+	alias=models.CharField(max_length=100)
 	email=models.CharField(max_length=100)
+	birthdate = models.CharField(max_length=10)
 	pw_hash=models.CharField(max_length=255)
 	created_at = models.DateTimeField(auto_now_add = True)
 	objects = UserManager()
